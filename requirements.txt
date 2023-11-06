@@ -1,0 +1,8 @@
+gradio==3.44.4
+openai-whisper
+python-dotenv
+Requests
+uvicorn
+elevenlabs
+geocoder
+google-search-results
