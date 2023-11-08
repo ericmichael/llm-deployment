@@ -325,4 +325,4 @@ def get_chatbot_app():
 # Call the launch_chatbot function to start the chatbot interface using Gradio
 app = get_chatbot_app()
 app.queue()  # this is to be able to queue multiple requests at once
-app.launch(share=False)
+app.launch(share=False, debug=True)
