@@ -169,6 +169,3 @@ tags
 
 # ruff
 .ruff_cache
-
-# stop from accidentally including seed data
-*.csv
