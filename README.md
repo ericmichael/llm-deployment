@@ -1,5 +1,5 @@
 ---
-title: OpenAI Agent
+title: LLM Deployment
 emoji: 🤖
 colorFrom: indigo
 colorTo: green
