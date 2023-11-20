@@ -21,6 +21,6 @@ jobs:
         # Install the HuggingFace CLI
         pip install huggingface_hub
         # Use the CLI to login
-        huggingface-cli login $HF_TOKEN
+        huggingface-cli login --token $HF_TOKEN
         # Push the repo to your HuggingFace Space
         git push https://huggingface.co/spaces/$HF_ORG/$HF_SPACE main
