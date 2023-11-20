@@ -10,10 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
-        fetch-depth: 0
-        lfs: true
+        fetch-depth: 0  # Fetch all history for all tags and branches
     - name: Deploy to HuggingFace Space
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
