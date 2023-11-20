@@ -14,13 +14,7 @@ jobs:
 
     - name: Deploy to HuggingFace Space
       env:
-        HF_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
-        HF_ORG: ${{ secrets.HUGGINGFACE_ORG }}  # Use the organization name secret
-        HF_SPACE: ${{ secrets.HUGGINGFACE_SPACE }}  # Use the space name secret
-      run: |
-        # Install the HuggingFace CLI
-        pip install huggingface_hub
-        # Use the CLI to login
-        huggingface-cli login --token $HF_TOKEN --add-to-git-credential
-        # Push the repo to your HuggingFace Space
-        git push https://huggingface.co/spaces/$HF_ORG/$HF_SPACE main
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        HF_USERNAME: ${{ secrets.HF_USERNAME }}  # Use the organization name secret
+        HF_SPACE: ${{ secrets.HF_SPACE }}  # Use the space name secret
+      run: git push https://$HF_USERNAME:$HF_TOKEN@huggingface.co/spaces/$HF_USERNAME/$HF_SPACE main
