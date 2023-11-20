@@ -1,0 +1,26 @@
+name: Deploy to HuggingFace Spaces
+
+on:
+  push:
+    branches:
+      - main  # Set this to the branch you want to deploy from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to HuggingFace Space
+      env:
+        HF_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+        HF_ORG: ${{ secrets.HUGGINGFACE_ORG }}  # Use the organization name secret
+        HF_SPACE: ${{ secrets.HUGGINGFACE_SPACE }}  # Use the space name secret
+      run: |
+        # Install the HuggingFace CLI
+        pip install huggingface_hub
+        # Use the CLI to login
+        huggingface-cli login $HF_TOKEN
+        # Push the repo to your HuggingFace Space
+        git push https://huggingface.co/spaces/$HF_ORG/$HF_SPACE main
