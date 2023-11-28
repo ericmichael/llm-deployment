@@ -1,0 +1,6 @@
+image: cs4341/test
+registry:
+  password: ${ROCKETSHIP_REGISTRY_PASSWORD}
+  server: cs4341.azurecr.io
+  username: cs4341
+service: myapp

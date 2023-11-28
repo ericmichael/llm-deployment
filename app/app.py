@@ -1,116 +1,139 @@
 from dotenv import load_dotenv
+from utils.user_manager import UserManager
+from utils.vector_collection import Document, VectorCollection
 
 load_dotenv()  # take environment variables from .env.
-
-import os
+import json
 import whisper
-import openai
 import gradio as gr
-# ---------------------------------------------------------------------------------------
-model = whisper.load_model("base")
+import logging
+
+from agent import Agent
+
+# Set up logging
+logging.basicConfig(filename='app.log', level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Load whisper model
+try:
+    model = whisper.load_model("base") # needs to be outside since loading is expensive
+except Exception as e:
+    logging.error(f"Error loading whisper model: {e}")
+    raise
+
+def load_data():
+    try:
+        with open("data/data.json") as f:
+            data = json.load(f)
+        return data
+    except FileNotFoundError:
+        logging.error("Error: data file not found.")
+        raise
+    except json.JSONDecodeError:
+        logging.error("Error: could not decode JSON.")
+        raise
 
 def transcribe(audio):
     result = model.transcribe(audio)
     return result["text"]
-# ---------------------------------------------------------------------------------------
-# Define a function to get the AI's reply using the OpenAI API
-def get_ai_reply(
-    message,
-    model="gpt-3.5-turbo",
-    system_message=None,
-    temperature=0,
-    message_history=[],
-):
-    # Initialize the messages list
-    messages = []
 
-    # Add the system message to the messages list
-    if system_message is not None:
-        messages += [{"role": "system", "content": system_message}]
-
-    # Add the message history to the messages list
-    if message_history is not None:
-        messages += message_history
-
-    if message is not None:
-        # Add the user's message to the messages list
-        messages += [{"role": "user", "content": message}]
-
-    # Make an API call to the OpenAI ChatCompletion endpoint with the model and messages
-    completion = openai.ChatCompletion.create(
-        model=model, messages=messages, temperature=temperature
-    )
-
-    # Extract and return the AI's response from the API response
-    return completion.choices[0].message.content.strip()
-
-
-# ---------------------------------------------------------------------------------------
-# Define a function to handle the chat interaction with the AI model
-def chat(message, audio, chatbot_messages, history_state):
-    # Initialize chatbot_messages and history_state if they are not provided
+def chat(agent, message, audio, chatbot_messages, history_state):
     chatbot_messages = chatbot_messages or []
     history_state = history_state or []
-
-    ### NEW
+    
     if audio:
         message = transcribe(audio)
 
-    # Try to get the AI's reply using the get_ai_reply function
     try:
-        prompt = """
-        You are a helpful AI assistant named Jarvis.        
-        """
-
-        ai_reply = get_ai_reply(
-            message,
-            model="gpt-3.5-turbo-16k",
-            system_message=prompt.strip(),
-            message_history=history_state,
-        )
-
-        # Append the user's message and the AI's reply to the history_state list
-        history_state.append({"role": "user", "content": message})
-        history_state.append({"role": "assistant", "content": ai_reply})
-
-        # Append the user's message and the AI's reply to the chatbot_messages list for the UI
+        ai_reply = agent.chat(message)
         chatbot_messages.append((message, ai_reply))
-
-        # Return None (empty out the user's message textbox), the updated chatbot_messages, and the updated history_state
     except Exception as e:
-        # If an error occurs, raise a Gradio error
         raise gr.Error(e)
-
+        
     return None, None, chatbot_messages, history_state
 
+def get_chatbot_app(user_manager, vdb_collection):
+    def is_admin(username):
+        return user_manager.authorize(username, 'admin')
+    
+    def add_user(username, password, role):
+        user_manager.add_user(username, password, role)
+        return user_manager.load_users()
+    
+    def remove_user(username):
+        user_manager.remove_user(username)
+        return user_manager.load_users()
 
-# Define a function to launch the chatbot interface using Gradio
-def get_chatbot_app():
-    # Create the Gradio interface using the Blocks layout
+    def check_admin_status(request: gr.Request):
+        username = request.username
+        if username and is_admin(username):
+            return gr.Row(visible=True)
+        else:
+            return gr.Row(visible=False)
+        
+    def get_agent():
+        return Agent(tools={
+            "search_food": {
+                "params": "query",
+                "description": """Tool to lookup food based close to the user based on their query. Use this tools when the user is looking for food suggestions near them. You don't need to know the user's location, the tool doesn't need it. Be careful, the tool will return the top results in the database but not all of them may be relevant. Use your judgement when answering the user's question. Example: search_food("place to get a good burger and craft beer")""",
+                "function": vdb_collection.search 
+            }
+        })
+
     with gr.Blocks() as app:
-        # Create a chatbot interface for the conversation
-        chatbot = gr.Chatbot(label="Conversation")
-        # Create a microphone input for the user's message
-        audio = gr.Audio(source="microphone", type="filepath")
-        # Create a textbox for the user's message
-        message = gr.Textbox(label="Message")
-        # Create a state object to store the conversation history
-        history_state = gr.State()
-        # Create a button to send the user's message
-        btn = gr.Button(value="Send")
+        agent = gr.State(value=get_agent)
+        with gr.Tab("Main"):
+            chatbot = gr.Chatbot(label="Conversation")
+            audio = gr.Audio(source="microphone", type="filepath")
+            message = gr.Textbox(label="Message")
+            history_state = gr.State()
+            btn = gr.Button(value="Send")
 
-        # Connect the send button to the chat function
-        btn.click(
-            chat,
-            inputs=[message, audio, chatbot, history_state],
-            outputs=[message, audio, chatbot, history_state],
-        )
-        # Return the app
+            btn.click(
+                chat,
+                inputs=[agent, message, audio, chatbot, history_state],
+                outputs=[message, audio, chatbot, history_state],
+            )
+        with gr.Tab("More"):
+            with gr.Row(visible=False) as manage_users_row:
+                with gr.Column():
+                    users = gr.DataFrame(label="Users", value=user_manager.load_users(), interactive=False, headers=["Username", "Role"])
+                with gr.Column():
+                    with gr.Group():
+                        username_add = gr.Textbox(label="Username")
+                        password_add = gr.Textbox(label="Password", type="password")
+                        role_add = gr.Dropdown(label="Role", choices=["Admin", "User"])
+                        add_user_btn = gr.Button(value="Add")
+                        add_user_btn.click(add_user, inputs=[username_add, password_add, role_add], outputs=[users])
+                with gr.Column():
+                    with gr.Group():
+                        username_delete = gr.Textbox(label="Username")
+                        remove_user_btn = gr.Button(value="Remove")
+                        remove_user_btn.click(remove_user, inputs=[username_delete], outputs=[users])
+                app.load(check_admin_status, inputs=None, outputs=[manage_users_row])
         return app
 
+try:
+    user_manager = UserManager()
+    user_manager.seed_database()
+except Exception as e:
+    logging.error(f"Error initializing UserManager: {e}")
+    raise
 
-# ---------------------------------------------------------------------------------------
-# Call the launch_chatbot function to start the chatbot interface using Gradio
-app = get_chatbot_app()
-app.queue()  # this is to be able to queue multiple requests at once
-app.launch(share=False, debug=True, server_name="0.0.0.0", server_port=7860)
+try:
+    vdb_collection = VectorCollection(collection_name="food")
+    data = load_data()
+        
+    for i, restaurant in enumerate(data):
+        vdb_collection.add(Document(i, restaurant))
+except Exception as e:
+    logging.error(f"Error initializing VectorCollection: {e}")
+    raise
+
+try:
+    app = get_chatbot_app(user_manager, vdb_collection)
+    app.queue()
+    app.launch(auth=user_manager.authenticate, share=False, debug=True, server_name="0.0.0.0", server_port=7860)
+except Exception as e:
+    logging.error(f"Error launching app: {e}")
+    raise

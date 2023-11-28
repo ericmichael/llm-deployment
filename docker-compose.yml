@@ -1,0 +1,16 @@
+version: '3'
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./db/chroma:/home/user/app/db/chroma
+      - ./db/duckdb:/home/user/app/db/duckdb
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}

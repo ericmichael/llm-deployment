@@ -145,7 +145,6 @@ runs
 /examples/rag/sweep
 
 # data
-/data
 serialization_dir
 
 # emacs
@@ -169,3 +168,6 @@ tags
 
 # ruff
 .ruff_cache
+
+db/chroma/.
+db/duckdb/.
