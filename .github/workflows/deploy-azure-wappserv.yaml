@@ -28,4 +28,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_REGISTRY_SERVER }}/image-name:${{ github.sha }}
+        tags: ${{ secrets.DOCKER_REGISTRY_SERVER }}/cs4341/test:${{ github.sha }}
