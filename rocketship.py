@@ -5,8 +5,36 @@ import subprocess
 import yaml
 import os
 import re
-
+import requests
+import base64
 import shutil
+
+def create_secret(token, repo, name, value):
+    url = f"https://api.github.com/repos/{repo}/actions/secrets/{name}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    data = {
+        "encrypted_value": base64.b64encode(value.encode()).decode(),
+        "key_id": get_public_key(token, repo)["key_id"],
+    }
+    response = requests.put(url, headers=headers, json=data)
+    response.raise_for_status()
+
+def create_github_secrets(token, repo, secrets):
+    for name, value in secrets.items():
+        create_secret(token, repo, name, value)
+
+def get_public_key(token, repo):
+    url = f"https://api.github.com/repos/{repo}/actions/secrets/public-key"
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
 
 def check_docker():
     if not shutil.which('docker'):
@@ -18,6 +46,13 @@ def check_dockerfile():
         print("Error: Dockerfile does not exist in the current directory.")
         exit(1)
 
+def check_github():
+    # Load the Github token from an environment variable
+    github_token = os.getenv("GITHUB_TOKEN")
+    if not github_token:
+        print("Error: GITHUB_TOKEN environment variable is not set.")
+        exit(1)
+    
 def init():
     config = {
         'service': 'myapp',
@@ -26,6 +61,9 @@ def init():
             'server': 'registry.server.com',
             'username': 'registry-user-name',
             'password': ['ROCKETSHIP_REGISTRY_PASSWORD']
+        },
+        'github': {
+            'repo': 'org-or-user/repo-name'
         }
     }
 
@@ -65,12 +103,14 @@ def validate_config(config):
 def setup():
     check_docker()
     check_dockerfile()
+    check_github()
     config = load_config()
     validate_config(config)
 
     registry = config['registry']
     image = config['image']
     service = config['service']
+    github_token = os.getenv("GITHUB_TOKEN")
 
     # Log into the registry
     try:
@@ -95,9 +135,17 @@ def setup():
         return
 
     # Pull the image from the registry onto the servers
-    # This is a placeholder. You'll need to replace this with the actual command to pull the image on your servers.
     print(f'Pulling image {image} from {registry["server"]} onto servers...')
 
+    # Create and push secrets to Github
+    print(f'Pushing secrets to Github repository: {config["github"]["repo"]} ...')
+    secrets = {
+        'ROCKETSHIP_REGISTRY_SERVER': registry['server'],
+        'ROCKETSHIP_REGISTRY_USERNAME': registry['username'],
+        'ROCKETSHIP_REGISTRY_PASSWORD': registry['password'],
+        'ROCKETSHIP_IMAGE': image
+    }
+    create_github_secrets(github_token, config['github']['repo'], secrets)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=['init', 'setup'])
