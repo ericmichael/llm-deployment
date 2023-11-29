@@ -6,18 +6,29 @@ import yaml
 import os
 import re
 import requests
-import base64
 import shutil
+from base64 import b64encode
+from nacl import encoding, public
+
+def encrypt(public_key: str, secret_value: str) -> str:
+    """Encrypt a Unicode string using the public key."""
+    public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
+    sealed_box = public.SealedBox(public_key)
+    encrypted = sealed_box.encrypt(secret_value.encode("utf-8"))
+    return b64encode(encrypted).decode("utf-8")
 
 def create_secret(token, repo, name, value):
+    public_key = get_public_key(token, repo)
+    encrypted_value = encrypt(public_key["key"], value)
+
     url = f"https://api.github.com/repos/{repo}/actions/secrets/{name}"
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json",
     }
     data = {
-        "encrypted_value": base64.b64encode(value.encode()).decode(),
-        "key_id": get_public_key(token, repo)["key_id"],
+        "encrypted_value": encrypted_value,
+        "key_id": public_key["key_id"],
     }
     response = requests.put(url, headers=headers, json=data)
     response.raise_for_status()
