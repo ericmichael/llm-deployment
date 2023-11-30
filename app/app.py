@@ -7,7 +7,7 @@ import json
 import whisper
 import gradio as gr
 import logging
-
+import pandas as pd
 from agent import Agent
 
 # Set up logging
@@ -97,7 +97,7 @@ def get_chatbot_app(user_manager, vdb_collection):
         with gr.Tab("More"):
             with gr.Row(visible=False) as manage_users_row:
                 with gr.Column():
-                    users = gr.DataFrame(label="Users", value=user_manager.load_users(), interactive=False, headers=["Username", "Role"])
+                    users = gr.DataFrame(label="Users", interactive=False, headers=["Username", "Role"])
                 with gr.Column():
                     with gr.Group():
                         username_add = gr.Textbox(label="Username")
@@ -111,6 +111,8 @@ def get_chatbot_app(user_manager, vdb_collection):
                         remove_user_btn = gr.Button(value="Remove")
                         remove_user_btn.click(remove_user, inputs=[username_delete], outputs=[users])
                 app.load(check_admin_status, inputs=None, outputs=[manage_users_row])
+                app.load(user_manager.load_users, inputs=None, outputs=[users])
+
         return app
 
 try:

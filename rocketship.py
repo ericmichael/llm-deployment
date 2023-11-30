@@ -1,4 +1,4 @@
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 load_dotenv()
 import argparse
 import subprocess
@@ -8,8 +8,22 @@ import re
 import requests
 import shutil
 from base64 import b64encode
-from nacl import encoding, public
 
+try:
+    from nacl import encoding, public
+except ImportError:
+    print("Error: The 'nacl' library is required for this script.")
+    print("You can install it with 'pip install pynacl'.")
+    exit(1)
+
+def azure_login():
+    try:
+        with open(os.devnull, 'w') as devnull:
+            subprocess.run(['az', 'login'], stdout=devnull, stderr=devnull, check=True)
+    except subprocess.CalledProcessError:
+        print("Error logging into Azure.")
+        return
+    
 def encrypt(public_key: str, secret_value: str) -> str:
     """Encrypt a Unicode string using the public key."""
     public_key = public.PublicKey(public_key.encode("utf-8"), encoding.Base64Encoder())
@@ -37,6 +51,19 @@ def create_github_secrets(token, repo, secrets):
     for name, value in secrets.items():
         create_secret(token, repo, name, value)
 
+def update_app_settings(azure, additional_env):
+    app_name = azure['app_service']['app_name']
+    resource_group = azure['app_service']['resource_group']
+    subscription = azure['subscription']  # Add the subscription to your config
+
+    for key, value in additional_env.items():
+        try:
+            with open(os.devnull, 'w') as devnull:
+                subprocess.run(['az', 'webapp', 'config', 'appsettings', 'set', '--name', app_name, '--resource-group', resource_group, '--settings', f'{key}={value}', '--subscription', subscription], stdout=devnull, stderr=devnull, check=True)
+        except subprocess.CalledProcessError:
+            print(f"Error setting app setting {key}.")
+            return
+        
 def get_public_key(token, repo):
     url = f"https://api.github.com/repos/{repo}/actions/secrets/public-key"
     headers = {
@@ -46,6 +73,12 @@ def get_public_key(token, repo):
     response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
+
+def check_azure_cli():
+    if not shutil.which('az'):
+        print("Error: Azure CLI is not installed or not in the system path.")
+        print("Please follow the installation instructions at: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli")
+        exit(1)
 
 def check_docker():
     if not shutil.which('docker'):
@@ -115,6 +148,8 @@ def setup():
     check_docker()
     check_dockerfile()
     check_github()
+    check_azure_cli()
+    
     config = load_config()
     validate_config(config)
 
@@ -122,6 +157,8 @@ def setup():
     image = config['image']
     service = config['service']
     github_token = os.getenv("GITHUB_TOKEN")
+
+    azure_login()
 
     # Log into the registry
     try:
@@ -157,6 +194,13 @@ def setup():
         'ROCKETSHIP_IMAGE': image
     }
     create_github_secrets(github_token, config['github']['repo'], secrets)
+
+    # Load environment variables from .env file
+    env_variables = dotenv_values(".env")
+    # Merge additional_env and env_variables
+    all_env_variables = {**config['azure']['app_service']['additional_env'], **env_variables}
+    update_app_settings(config['azure'], all_env_variables)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=['init', 'setup'])
