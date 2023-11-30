@@ -6,3 +6,14 @@ registry:
 service: myapp
 github:
   repo: ericmichael/llm-deployment-docker
+azure:
+  subscription: ${AZURE_SUBSCRIPTION_ID}
+  app_service:
+    app_name: csci4341-test
+    resource_group: cs-rg-4341-scus
+    additional_env:
+      CHROMADB_STORAGE_PATH: /home/app/db/chromadb/
+      DUCKDB_STORAGE_PATH: /home/app/db/duckdb/
+      WEBSITES_CONTAINER_START_TIME_LIMIT: 500
+      WEBSITES_ENABLE_APP_SERVICE_STORAGE: true
+      WEBSITES_PORT: 7860
