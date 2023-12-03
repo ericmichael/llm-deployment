@@ -24,14 +24,6 @@ jobs:
       run: |
         python manage.py migrate
 
-    - name: Seed the database
-      run: |
-        # Add your commands to seed the database here
-        # For example, you might load fixtures:
-        python manage.py loaddata myfixture.json
-        # Or you might have a custom management command:
-        python manage.py seed_database
-
     - name: Run tests
       run: |
         python manage.py test
