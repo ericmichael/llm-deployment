@@ -28,6 +28,6 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.ROCKETSHIP_REGISTRY_SERVER }}/${{ secrets.ROCKETSHIP_IMAGE }}:${{ github.sha }}
+        tags: ${{ secrets.ROCKETSHIP_REGISTRY_SERVER }}/${{ secrets.ROCKETSHIP_IMAGE }}:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
