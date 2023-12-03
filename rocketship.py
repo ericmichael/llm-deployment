@@ -195,12 +195,13 @@ def setup():
         'ROCKETSHIP_REGISTRY_PASSWORD': registry['password'],
         'ROCKETSHIP_IMAGE': image
     }
-    all_github_secrets = {**github_secrets, **env_variables}
+    all_github_secrets = {**env_variables, **github_secrets}
     all_github_secrets.pop('GITHUB_TOKEN', None)
     create_github_secrets(github_token, config['github']['repo'], all_github_secrets)
 
     # Merge additional_env and env_variables
-    all_azure_secrets = {**config['azure']['app_service']['additional_env'], **env_variables}
+    print(f'Pushing secrets to Azure Web App Service ...')
+    all_azure_secrets = {**env_variables, **config['azure']['app_service']['additional_env']}
     update_app_settings(config['azure'], all_azure_secrets)
 
 def main():
