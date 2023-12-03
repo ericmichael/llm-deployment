@@ -21,9 +21,13 @@ jobs:
         pip install -r requirements.txt
 
     - name: Apply migrations
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }} # Set the SECRET_KEY environment variable
       run: |
         python manage.py migrate
 
     - name: Run tests
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }} # Set the SECRET_KEY environment variable
       run: |
         python manage.py test
