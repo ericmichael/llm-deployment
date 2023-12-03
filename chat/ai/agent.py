@@ -19,12 +19,7 @@ import openai
 import re
 from django.conf import settings
 
-try:
-    if settings.OPENAI_API_BASE:
-        openai.api_base = settings.OPENAI_API_BASE
-except:
-    pass
-
+openai.api_base = settings.OPENAI_API_BASE
 openai.api_key = settings.OPENAI_API_KEY
 
 class ToolInvoker:

@@ -146,7 +146,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DEFAULT_OPENAI_API_BASE = "https://api.openai.com/v1"
+
+ENV_OPENAI_API_BASE = os.getenv("OPENAI_API_BASE")
+
+OPENAI_API_BASE = ENV_OPENAI_API_BASE if ENV_OPENAI_API_BASE else DEFAULT_OPENAI_API_BASE 
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", None)
 
 AUTH_USER_MODEL = 'chat.CustomUser'
 
