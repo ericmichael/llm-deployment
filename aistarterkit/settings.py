@@ -28,20 +28,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+ENV = os.getenv("ENVIRONMENT", 'development')
 
-if DEBUG==False:
-    ALLOWED_HOSTS = [os.getenv('WEBSITE_HOSTNAME', 'localhost')]
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+website_hostname = os.getenv('WEBSITE_HOSTNAME')
+
+if ENV == 'development' or ENV == 'test':
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
+    DEBUG = True
     ALLOWED_HOSTS = []
-
-# Application definition
+    if website_hostname:
+        CSRF_TRUSTED_ORIGINS = ['https://' + website_hostname]
+        ALLOWED_HOSTS.append(website_hostname)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SAMESITE = 'None'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,6 +150,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(os.getenv('DJANGO_STATIC_ROOT', BASE_DIR), 'staticfiles')
+
+os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
