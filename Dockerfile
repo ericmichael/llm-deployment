@@ -38,11 +38,12 @@ USER user
 # Copy the current directory contents into the container at /app
 COPY --chown=user . $APP_HOME/
 
-# Make port 7860 available to the world outside this container
-EXPOSE 7860
+# Make port 8000 available to the world outside this container
+EXPOSE 8000
 
 # Set the entrypoint script as the entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Run the application when the container launches
-CMD ["python", "app/app.py"]
+# Run the Gunicorn server when the container launches
+CMD ["gunicorn", "aistarterkit.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]

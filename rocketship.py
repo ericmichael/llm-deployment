@@ -187,19 +187,21 @@ def setup():
 
     # Create and push secrets to Github
     print(f'Pushing secrets to Github repository: {config["github"]["repo"]} ...')
-    secrets = {
+    # Load environment variables from .env file
+    env_variables = dotenv_values(".env")
+    github_secrets = {
         'ROCKETSHIP_REGISTRY_SERVER': registry['server'],
         'ROCKETSHIP_REGISTRY_USERNAME': registry['username'],
         'ROCKETSHIP_REGISTRY_PASSWORD': registry['password'],
         'ROCKETSHIP_IMAGE': image
     }
-    create_github_secrets(github_token, config['github']['repo'], secrets)
+    all_github_secrets = {**github_secrets, **env_variables}
+    all_github_secrets.pop('GITHUB_TOKEN', None)
+    create_github_secrets(github_token, config['github']['repo'], all_github_secrets)
 
-    # Load environment variables from .env file
-    env_variables = dotenv_values(".env")
     # Merge additional_env and env_variables
-    all_env_variables = {**config['azure']['app_service']['additional_env'], **env_variables}
-    update_app_settings(config['azure'], all_env_variables)
+    all_azure_secrets = {**config['azure']['app_service']['additional_env'], **env_variables}
+    update_app_settings(config['azure'], all_azure_secrets)
 
 def main():
     parser = argparse.ArgumentParser()
