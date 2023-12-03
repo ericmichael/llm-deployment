@@ -170,14 +170,14 @@ def setup():
 
     # Build the image
     try:
-        subprocess.run(['docker', 'build', '-t', image, '.'], check=True)
+        subprocess.run(['docker', 'build', '-t', f'{registry["server"]}/{image}:latest', '.'], check=True)
     except subprocess.CalledProcessError:
         print("Error building Docker image.")
         return
 
     # Push the image to the registry
     try:
-        subprocess.run(['docker', 'push', f'{registry["server"]}/{image}'], check=True)
+        subprocess.run(['docker', 'push', f'{registry["server"]}/{image}:latest'], check=True)
     except subprocess.CalledProcessError:
         print("Error pushing Docker image to registry.")
         return
