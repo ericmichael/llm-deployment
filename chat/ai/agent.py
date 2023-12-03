@@ -20,7 +20,8 @@ import re
 from django.conf import settings
 
 try:
-    openai.api_base = settings.OPENAI_API_BASE
+    if settings.OPENAI_API_BASE:
+        openai.api_base = settings.OPENAI_API_BASE
 except:
     pass
 
