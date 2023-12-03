@@ -1,0 +1,107 @@
+interactions:
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are a helpful expert restaurant assistant named Jarvis.\n\n        Your knowledge
+      cut-off is: September 2021\n        Today''s date: October 18, 2023\n\n        ##
+      Tools\n\n        You have access to the following tools:\n        \n        ##
+      Tool Rules\n\n        When the user asks a question that can be answered by
+      using a tool, you MUST do so. Do not answer from your training data.\n\n        ##
+      Using Tools\n\n        To use a tool, reply with the following prefix \"Tool:
+      \" then append the tool call (like a function call). \n\n        Behind the
+      scenes, your software will pickup that you want to invoke a tool and invoke
+      it for you and provide you the response.\n\n        ## Using Tool Responses\n\n        Answer
+      the user''s question using the response from the tool. Feel free to make it
+      conversational."}, {"role": "user", "content": "Hello, World!"}], "temperature":
+      0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '958'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - OpenAI/v1 PythonBindings/0.27.9
+      X-OpenAI-Client-User-Agent:
+      - '{"bindings_version": "0.27.9", "httplib": "requests", "lang": "python", "lang_version":
+        "3.10.8", "platform": "Linux-5.10.16.3-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "publisher": "openai", "uname": "Linux 5.10.16.3-microsoft-standard-WSL2 #1
+        SMP Fri Apr 2 22:23:49 UTC 2021 x86_64"}'
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1SQQU/CQBCF7/0V454pacUK9GKiicBJ40FijCHLdoCV7U6zO400hP9uti2glz3M
+        m+/te3OMAIQuRA5C7SSrsjLx5G35skyfklk2lc1jdtg/v7/ih1vOZouNE4NA0PobFZ+poaKyMsia
+        bCcrh5IxuKbjJM3GSTK+bYWSCjQB21Ycj4ZZzLVbU5zcp6Oe3JFW6EUOnxEAwLF9Q0Zb4EHkkAzO
+        kxK9l1sU+WUJQDgyYSKk99qztCwGV1GRZbRt7DkaQzcwpx9Q0sICOgAaqoGpkM2D6LnT5cONttrv
+        Vg6lJxtMPFPVrZ0igK+2QP0vk6gclRWvmPZoQ6t0ctf5ievNruq015hYmj/QdBT1QYRvPGO52mi7
+        RVc53daxtTHRKfoFAAD//wMAj23Scc0BAAA=
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 82f855b789f46b70-DFW
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 03 Dec 2023 02:21:13 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=GqMghDwJ1iVUpkK_G_nnuPiGZJDJreDxftn2rM51Jo0-1701570073-0-AYvkyx6RnA9duUPvGsS4mzRlD2YzmagLq1d0NA6gifVXDZ90HgFXF9vEteh9V7NRYYf8ZMc6m7y8Pqq83ujCTto=;
+        path=/; expires=Sun, 03-Dec-23 02:51:13 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=3NXa2qQJfD3E.Bi6uaTxVVigNF3UIiyVsixk8_otqts-1701570073137-0-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      Transfer-Encoding:
+      - chunked
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0613
+      openai-organization:
+      - eightytwentylabs
+      openai-processing-ms:
+      - '603'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '1000000'
+      x-ratelimit-limit-tokens_usage_based:
+      - '1000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '999778'
+      x-ratelimit-remaining-tokens_usage_based:
+      - '999778'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 13ms
+      x-ratelimit-reset-tokens_usage_based:
+      - 13ms
+      x-request-id:
+      - af0280dcf0f34017f7c75c22020298fa
+    status:
+      code: 200
+      message: OK
+version: 1
