@@ -20,6 +20,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Apply migrations
+      run: |
+        python manage.py migrate
+
+    - name: Seed the database
+      run: |
+        # Add your commands to seed the database here
+        # For example, you might load fixtures:
+        python manage.py loaddata myfixture.json
+        # Or you might have a custom management command:
+        python manage.py seed_database
+
     - name: Run tests
       run: |
-        python -m unittest discover -s test -p '*_test.py'
+        python manage.py test
