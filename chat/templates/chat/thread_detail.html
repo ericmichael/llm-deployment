@@ -1,0 +1,41 @@
+<!-- chat/templates/chat/thread_detail.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="flex flex-col h-screen">
+    <!-- Header -->
+    <div class="p-4 flex items-center">
+        <h1 class="text-xl flex-1">{{ thread.name }}</h1>
+    </div>
+    <!-- Chat Content -->
+    <div class="flex-1 overflow-y-auto">
+        {% for message in messages %}
+        <div
+            class="flex gap-4 p-6 border-b border-gray-200 text-gray-800 {% if message.role == 'user' %}bg-gray-50{% endif %}">
+            {% if message.role != 'user' %}
+            <!-- Bot Icon -->
+            <i class="fas fa-robot text-lg text-indigo-400"></i>
+            {% else %}
+            <!-- User Icon -->
+            <i class="fas fa-user text-lg text-green-400"></i>
+            {% endif %}
+            <p>{{ message.content }}</p>
+        </div>
+        {% empty %}
+        <div class="text-center p-6">No messages yet.</div>
+        {% endfor %}
+    </div>
+
+    <!-- Footer -->
+    <div class="ion-no-border p-4 bg-white">
+        <form method="POST" action="{% url 'new_message' thread.pk %}" class="flex items-center">
+            {% csrf_token %}
+            <textarea name="content" rows="1" class="flex-1 border border-gray-300 rounded-md shadow-sm p-2 resize-none"
+                placeholder="Type a message..."></textarea>
+            <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Send
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
