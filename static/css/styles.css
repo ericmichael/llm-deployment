@@ -1,0 +1,14 @@
+code {
+    text-shadow: none !important;
+}
+
+code:not(pre > code) {
+    background: #2d2d2d;
+    font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
+    color: #ccc;
+    padding: 4px;
+}
+
+.token.operator {
+    background: none !important;
+}

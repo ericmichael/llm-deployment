@@ -147,24 +147,8 @@ def new_message(request, pk):
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
-            message.thread = thread
-            message.user = request.user
-            message.role = 'user'
-            message.save()
-
-            # Get the AI's reply to the message
-            agent = Agent()
-
-            ai_reply = agent.chat(message.content)
-
-            # Create a new message with the AI's reply
-            Message.objects.create(
-                thread=thread,
-                user=request.user,
-                role='assistant',
-                content=ai_reply
-            )
-
+            agent = Agent(thread=thread)
+            agent.chat(message.content)
             return redirect('thread_detail', pk=thread.pk)
     else:
         form = MessageForm()
