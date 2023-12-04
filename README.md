@@ -17,7 +17,7 @@ This project uses a number of Python, JavaScript, and other libraries to provide
 
 - `openai`: This library is used to interact with the OpenAI API, which provides access to powerful AI models.
 - `python-dotenv`: This library is used to manage environment variables, which are crucial for managing secrets and configuration in a secure manner.
-- `chromadb`: This library is used to interact with the sqlite3 database.
+- `chromadb`: This library is used to provide vector database and embedding search functionality.
 - `vcrpy`: This library is used to record and replay HTTP interactions, which is useful for testing.
 - `tenacity`: This library is used to add retry logic to the application, which can help it recover from temporary issues.
 - `gunicorn`: This is a WSGI HTTP server for Python web applications.
