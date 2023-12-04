@@ -26,12 +26,6 @@ COPY ./requirements.txt ./
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Install Node dependencies
-RUN npm install
-
-# Run the Webpacker build
-RUN npm run build
-
 # Create a user to run the app
 RUN useradd -m -u 1000 user
 
@@ -44,10 +38,16 @@ COPY entrypoint.sh /entrypoint.sh
 # Make the entrypoint script executable
 RUN chmod +x /entrypoint.sh
 
-USER user
-
 # Copy the current directory contents into the container at /app
 COPY --chown=user . $APP_HOME/
+
+# Install Node dependencies
+RUN npm install
+
+# Run the Webpacker build
+RUN npm run build
+
+USER user
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
