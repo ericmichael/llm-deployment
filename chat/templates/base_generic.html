@@ -1,4 +1,5 @@
 <!-- chat/templates/base_generic.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,6 +10,18 @@
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://unpkg.com/prismjs@1.29.0/themes/prism.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        code {
+            text-shadow: none !important;
+        }
+
+        .token.operator {
+            background: none !important;
+        }
+    </style>
+    <script src="{% static 'js/bundle.js' %}"></script>
 </head>
 
 <body class="bg-gray-100">
@@ -16,57 +29,50 @@
         {% if request.user.is_authenticated %}
         <!-- Side Menu -->
         <div id="sidebar" class="flex flex-col w-80 bg-gray-900 text-white min-h-screen">
-            <div class="flex-1">
-                <!-- New Chat Button -->
-                <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-700">
-                    <i class="fas fa-plus"></i>
-                    <a href="{% url 'create_thread' %}" class="text-white">New Chat</a>
-                </div>
-                <!-- Thread List -->
-                <div class="border-t border-gray-700 overflow-y-visible">
-                    {% for thread in threads %}
-                    <div
-                        class="px-4 py-3 flex justify-between items-center hover:bg-gray-700 cursor-pointer {% if thread.pk == active_thread_id %}bg-gray-800{% endif %}">
-                        <a href="{% url 'thread_detail' thread.pk %}" class="text-white flex items-center">
-                            <i class="fas fa-comments"></i>
-                            <span class="pl-2">{{ thread.name }}</span>
-                        </a>
-                        <div class="relative">
-                            <button class="text-xs"
-                                onclick="toggleMenu(event, 'menu-{{ thread.pk }}', {{ forloop.last|lower }})">
-                                <i class="fas fa-ellipsis-h"></i>
-                            </button>
-                            <div id="menu-{{ thread.pk }}"
-                                class="hidden pop-up-menu absolute z-10 w-48 bg-white text-gray-900 shadow-lg right-0 mt-1 {% if forloop.last %}bottom-full mb-1{% else %}top-full{% endif %}">
-                                <form action="{% url 'delete_thread' pk=thread.pk %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit"
-                                        class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                                        onclick="return confirm('Are you sure you want to delete this chat?');">
-                                        <i class="fas fa-trash-alt pr-2"></i>
-                                        Delete chat
-                                    </button>
-                                </form>
-                            </div>
+            <!-- New Chat Button -->
+            <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-700">
+                <i class="fas fa-plus"></i>
+                <a href="{% url 'create_thread' %}" class="text-white">New Chat</a>
+            </div>
+            <!-- Thread List -->
+            <div class="border-t border-gray-700 overflow-y-visible">
+                {% for sidebar_thread in threads %}
+                <div
+                    class="px-4 py-3 flex justify-between items-center hover:bg-gray-700 cursor-pointer {% if sidebar_thread.pk == thread.pk %}bg-gray-800{% endif %}">
+                    <a href="{% url 'thread_detail' sidebar_thread.pk %}" class="text-white flex items-center gap-3">
+                        <i class="fas fa-comments"></i>
+                        <span>{{ sidebar_thread.name }}</span>
+                    </a>
+                    <div class="relative">
+                        <button class="text-xs"
+                            onclick="toggleMenu(event, 'menu-{{ sidebar_thread.pk }}', {{ forloop.last|lower }})">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div id="menu-{{ sidebar_thread.pk }}"
+                            class="hidden pop-up-menu absolute z-10 w-48 bg-white text-gray-900 shadow-lg right-0 mt-1 {% if forloop.last %}bottom-full mb-1{% else %}top-full{% endif %}">
+                            <form action="{% url 'delete_thread' pk=sidebar_thread.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                    onclick="return confirm('Are you sure you want to delete this chat?');">
+                                    <i class="fas fa-trash-alt pr-2"></i>
+                                    Delete chat
+                                </button>
+                            </form>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
             <!-- Menu Footer -->
             <div class="mt-auto w-full">
                 <!-- Divider -->
                 <div class="border-t border-gray-700"></div>
-                <!-- Clear Conversations Button -->
-                <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-700">
-                    <i class="fas fa-trash-alt"></i>
-                    <span>Clear Conversations</span>
-                </div>
                 <!-- Settings Button -->
-                <div class="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-700">
+                <a href="{% url 'settings' %}" class="p-4 flex items-center gap-3 cursor-pointer hover:bg-gray-700">
                     <i class="fas fa-gear"></i>
-                    <span>Settings</span>
-                </div>
+                    <span>Developer Settings</span>
+                </a>
                 <!-- Sign Out Button -->
                 <form action="{% url 'logout' %}" method="post" class="w-full">
                     {% csrf_token %}
@@ -77,6 +83,8 @@
                     </button>
                 </form>
             </div>
+
+
         </div>
         {% endif %}
         <!-- Main Content -->
@@ -106,6 +114,8 @@
             });
         });
     </script>
+    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 
 </html>

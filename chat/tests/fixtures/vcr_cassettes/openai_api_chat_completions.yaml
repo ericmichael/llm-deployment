@@ -1,0 +1,92 @@
+interactions:
+- request:
+    body: '{"messages": [{"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "Who won the world series in 2020?"}], "model":
+      "gpt-3.5-turbo"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '169'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.31.0
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1SQzU/CQBDF7/0rJnumpB9SSG8kmkhQD2rCwRhS2qFd2e6UnWkQDf+7aflovOzh
+        vXkvv7e/HoDShUpB5VUmed0Yf/bqDg+LY8vJ44qmz/Of7GUR74N9vdytlmrUJWjzhblcU+Oc6sag
+        aLJnO3eYCXat4TQIk0k0myW9UVOBpouVjfjxeOJL6zbkB0kYX5IV6RxZpfDhAQD89m/HaAv8VikE
+        o6tSI3NWokpvRwDKkekUlTFrlsyKGg1mTlbQ9tjvFcITMcxtiQYZ7qko0TEcyIJUCCtypoA3dBoZ
+        tIUoiIKxulSdbgxbbTVXa4cZk+16Wag5n508gM9+U/sPUzWO6kbWQju03dBoeq5Twy8OZhhfTCHJ
+        zKDfBd6FQ/GRBev1VtsSXeN0P9C2xngn7w8AAP//AwD1BR5I3wEAAA==
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 83003b8a7ff66c5e-DFW
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 04 Dec 2023 01:21:26 GMT
+      Server:
+      - cloudflare
+      Set-Cookie:
+      - __cf_bm=MOPSDlt1oAzhijr1MR7UjLuVBcwqb0_paq_ecyfrEZc-1701652886-0-ATaZrjShtF3kGyF4pnPmPXCIzuoCe5z9CF/J7VXBx2yJlKH8t0Vm7PJISe3somRjurB4erAnoay+Kx1D46WK21s=;
+        path=/; expires=Mon, 04-Dec-23 01:51:26 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=1Q62.ovMLdJicdl8BC9xdCgj9fXyJirA7nE_loKsrP4-1701652886864-0-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      Transfer-Encoding:
+      - chunked
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0613
+      openai-organization:
+      - eightytwentylabs
+      openai-processing-ms:
+      - '391'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '1000000'
+      x-ratelimit-limit-tokens_usage_based:
+      - '1000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '999965'
+      x-ratelimit-remaining-tokens_usage_based:
+      - '999965'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 2ms
+      x-ratelimit-reset-tokens_usage_based:
+      - 2ms
+      x-request-id:
+      - 690d6746accacc0f8142efbc88805050
+    status:
+      code: 200
+      message: OK
+version: 1
