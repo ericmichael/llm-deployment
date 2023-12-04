@@ -10,9 +10,14 @@ RUN apt-get -y update
 # Set working directory in the container
 WORKDIR $APP_HOME
 
+# Ensure node.js 18 is available for apt-get
+ARG NODE_MAJOR=18
+RUN curl -sL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
+
 # Install any needed packages
 RUN apt-get -y update && \
     apt-get install -y ffmpeg libavcodec-extra && \
+    apt-get install -y nodejs npm && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements.txt first, for better cache on builds

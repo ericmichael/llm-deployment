@@ -171,3 +171,13 @@ tags
 
 db/chroma/.
 db/duckdb/.
+db/sqlite3/.
+
+# Ignore node_modules
+node_modules/
+
+staticfiles/
+
+*.sqlite3
+
+demoapp.py

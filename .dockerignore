@@ -1,5 +1,57 @@
-
 db/
+
+# Version control directories
+.git
+.gitignore
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache
+db.sqlite3
+*.sqlite3
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Webpack
+dist
+*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*.sublime-workspace
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__
+media
+staticfiles
+static_in_env
+wwwroot
+
+# Docker
+Dockerfile
+.dockerignore
+*.dockerfile
+*.docker-compose.yml
 
 # Ignore unnecessary files inside allowed directories
 # This should go after the allowed directories
