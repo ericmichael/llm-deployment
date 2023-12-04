@@ -108,6 +108,7 @@ if sqlite_storage_path:
 else:
     # Otherwise, use BASE_DIR as the directory
     db_path = BASE_DIR / 'db/sqlite3/db.sqlite3'
+    os.makedirs(db_path, exist_ok=True)
 
 
 CHROMADB_STORAGE_PATH = os.getenv('CHROMADB_STORAGE_PATH')
