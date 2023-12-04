@@ -107,7 +107,11 @@ if sqlite_storage_path:
     os.makedirs(sqlite_storage_path, exist_ok=True)
 else:
     # Otherwise, use BASE_DIR as the directory
-    db_path = BASE_DIR / 'db.sqlite3'
+    db_path = BASE_DIR / 'db/sqlite3/db.sqlite3'
+
+
+CHROMADB_STORAGE_PATH = os.getenv('CHROMADB_STORAGE_PATH')
+  
 
 DATABASES = {
     'default': {
@@ -157,7 +161,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / 'assets',
 ]
 
 STATIC_URL = 'static/'
