@@ -1,12 +1,10 @@
-from dotenv import load_dotenv
 import os
 import json
 from pathlib import Path
 import chromadb
 from chromadb.utils import embedding_functions
 from tenacity import retry, wait_exponential, stop_after_attempt
-
-load_dotenv()  # take environment variables from .env.
+from django.conf import settings
 
 class Document:
     """
@@ -87,11 +85,10 @@ class VectorCollection:
             collection_name : str
                 the name of the collection in the ChromaDB
         """
-        # Use CHROMADB_STORAGE_PATH environment variable if it's set
-        path = os.getenv('CHROMADB_STORAGE_PATH', None)
+        path = settings.CHROMADB_STORAGE_PATH
 
         # When path is given, create directories if they do not exist and create a PersistentClient
-        if path is not None:
+        if path:
             Path(path).parent.mkdir(parents=True, exist_ok=True)
             self.chroma_client = chromadb.PersistentClient(path=path)
         else:
@@ -113,8 +110,8 @@ class VectorCollection:
             a collection of documents in the ChromaDB
         """
         openai_ef = embedding_functions.OpenAIEmbeddingFunction(
-                        api_key=os.getenv("OPENAI_API_KEY"),
-                        api_base=os.getenv("OPENAI_API_BASE"),
+                        api_key=settings.OPENAI_API_KEY,
+                        api_base=settings.OPENAI_API_BASE,
                         model_name="text-embedding-ada-002"
                     )
 

@@ -1,11 +1,8 @@
-# gradio==3.50.2
 openai==0.27.9
-# openai-whisper
 python-dotenv==1.0.0
-# chromadb==0.4.18
-# duckdb
+chromadb==0.4.18
 vcrpy==5.1.0
-# tenacity==8.2.3
+tenacity==8.2.3
 gunicorn==21.2.0
 django==4.2.7
 whitenoise==6.6.0

@@ -1,0 +1,210 @@
+interactions:
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are a helpful expert restaurant assistant named Jarvis.\n\n        Your knowledge
+      cut-off is: September 2021\n        Today''s date: October 18, 2023\n\n        ##
+      Tools\n\n        You have access to the following tools:\n        \n- search_food(query):
+      Tool to lookup food based on the user''s query.\n        ## Tool Rules\n\n        When
+      the user asks a question that can be answered by using a tool, you MUST do so.
+      Do not answer from your training data.\n\n        ## Using Tools\n\n        To
+      use a tool, reply with the following prefix \"Tool: \" then append the tool
+      call (like a function call). \n\n        Behind the scenes, your software will
+      pickup that you want to invoke a tool and invoke it for you and provide you
+      the response.\n\n        ## Using Tool Responses\n\n        Answer the user''s
+      question using the response from the tool. Feel free to make it conversational."},
+      {"role": "user", "content": "Where can I get tacos in Edinburg?"}], "temperature":
+      0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1049'
+      Content-Type:
+      - application/json
+      Cookie:
+      - __cf_bm=8VEwRzXch2OaYSUSZLzK7KbOcNkQclrjiawIWsNMC9s-1701715662-0-Ab/N6sYW4vDuiDe/YNu6VOgfmtt+S7RxiJVPHI/7VKusko01VZlNm1jZ70Mctegotvtdhjec24hgLef+cn+vRFE=;
+        _cfuvid=ifpGEfxNFW8XRdoOsFGw7PL8EkS02dTK7ZjIA20asnw-1701715662228-0-604800000
+      User-Agent:
+      - OpenAI/v1 PythonBindings/0.27.9
+      X-OpenAI-Client-User-Agent:
+      - '{"bindings_version": "0.27.9", "httplib": "requests", "lang": "python", "lang_version":
+        "3.10.8", "platform": "Linux-5.10.16.3-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "publisher": "openai", "uname": "Linux 5.10.16.3-microsoft-standard-WSL2 #1
+        SMP Fri Apr 2 22:23:49 UTC 2021 x86_64"}'
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1SQQU/CQBCF7/0VkzlpQkkLoUBvmqjxYkzQkxiybId2dbvT7E4TlfDfTUsBvexh
+        3nxv35t9BICmwBxQV0p03dh4sVo8+GB0RqlfvRpv759vbsun9FHUzxJHHcHbD9Jyosaa68aSGHZH
+        WXtSQp1rOk/SeTrLsmUv1FyQ7bCykXg6nsXS+i3HSZZOB7JioylgDm8RAMC+f7uMrqAvzCEZnSY1
+        haBKwvy8BICebTdBFYIJopzg6CJqdkKuj/3CbHMIpLyuNjvm4mqNojQHMA7uCuO2rS/XeI0DfTh/
+        uzPOhGrjSQV2nVUQbo5rhwjgva/R/kuGjee6kY3wJ7mu2yTJjn54udxFTSeDKCzK/qHSRTQkwfAd
+        hOrNzriSfONN38q11kaH6BcAAP//AwDpIMUN1AEAAA==
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 830638541af56b36-DFW
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 04 Dec 2023 18:47:51 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0613
+      openai-organization:
+      - eightytwentylabs
+      openai-processing-ms:
+      - '328'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '1000000'
+      x-ratelimit-limit-tokens_usage_based:
+      - '1000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '999756'
+      x-ratelimit-remaining-tokens_usage_based:
+      - '999756'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 14ms
+      x-ratelimit-reset-tokens_usage_based:
+      - 14ms
+      x-request-id:
+      - 9b01a96e521b2d046ce6c664c014038d
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"model": "gpt-3.5-turbo", "messages": [{"role": "system", "content": "You
+      are a helpful expert restaurant assistant named Jarvis.\n\n        Your knowledge
+      cut-off is: September 2021\n        Today''s date: October 18, 2023\n\n        ##
+      Tools\n\n        You have access to the following tools:\n        \n- search_food(query):
+      Tool to lookup food based on the user''s query.\n        ## Tool Rules\n\n        When
+      the user asks a question that can be answered by using a tool, you MUST do so.
+      Do not answer from your training data.\n\n        ## Using Tools\n\n        To
+      use a tool, reply with the following prefix \"Tool: \" then append the tool
+      call (like a function call). \n\n        Behind the scenes, your software will
+      pickup that you want to invoke a tool and invoke it for you and provide you
+      the response.\n\n        ## Using Tool Responses\n\n        Answer the user''s
+      question using the response from the tool. Feel free to make it conversational."},
+      {"role": "user", "content": "Where can I get tacos in Edinburg?"}, {"role":
+      "assistant", "content": "Tool: search_food(\"tacos in Edinburg\")"}, {"role":
+      "assistant", "content": "Tool Result: Taco Palenque"}], "temperature": 0}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1191'
+      Content-Type:
+      - application/json
+      Cookie:
+      - __cf_bm=8VEwRzXch2OaYSUSZLzK7KbOcNkQclrjiawIWsNMC9s-1701715662-0-Ab/N6sYW4vDuiDe/YNu6VOgfmtt+S7RxiJVPHI/7VKusko01VZlNm1jZ70Mctegotvtdhjec24hgLef+cn+vRFE=;
+        _cfuvid=ifpGEfxNFW8XRdoOsFGw7PL8EkS02dTK7ZjIA20asnw-1701715662228-0-604800000
+      User-Agent:
+      - OpenAI/v1 PythonBindings/0.27.9
+      X-OpenAI-Client-User-Agent:
+      - '{"bindings_version": "0.27.9", "httplib": "requests", "lang": "python", "lang_version":
+        "3.10.8", "platform": "Linux-5.10.16.3-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "publisher": "openai", "uname": "Linux 5.10.16.3-microsoft-standard-WSL2 #1
+        SMP Fri Apr 2 22:23:49 UTC 2021 x86_64"}'
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA1SQS2/CMBCE7/kVW58BEd7ijqpKbYVaKrWqKmSchRic3WBvBCniv1cJz158mG9n
+        PTuHCEDZRI1BmVSLyXLXHL2PHqU3c2+fyNOXXc6/z7PO0+vebRcfU9WoHLxYo5GLq2U4yx2KZTph
+        41ELVlvjYTsexv3BMK5Bxgm6yrbKpdlt9ZtS+AU324O4e3ambA0GNYbvCADgUL9VRkpwr8bQblyU
+        DEPQK1Tj6xCA8uwqRekQbBBNoho3aJgEqY79xQUYTSC+hJk2DFPtkLYFgiWYJJYWhV+1YJZiCdoj
+        bIh3BEv2IClaDwk6aywXAUQbDi2Y0JpLKLnwkKF2D+r87fGad2nJhnTuUQemKkMQzk9jxwjgp76/
+        +HeSyj1nucyFN0hVKZ1u97RP3Sq/o70zFBbt7vT+MDonUaEMgtl8aWmFPve2roMK56Jj9AcAAP//
+        AwBylFSHDQIAAA==
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 83063860de3f6b36-DFW
+      Cache-Control:
+      - no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 04 Dec 2023 18:47:52 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      access-control-allow-origin:
+      - '*'
+      alt-svc:
+      - h3=":443"; ma=86400
+      openai-model:
+      - gpt-3.5-turbo-0613
+      openai-organization:
+      - eightytwentylabs
+      openai-processing-ms:
+      - '822'
+      openai-version:
+      - '2020-10-01'
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      x-ratelimit-limit-requests:
+      - '10000'
+      x-ratelimit-limit-tokens:
+      - '1000000'
+      x-ratelimit-limit-tokens_usage_based:
+      - '1000000'
+      x-ratelimit-remaining-requests:
+      - '9999'
+      x-ratelimit-remaining-tokens:
+      - '999739'
+      x-ratelimit-remaining-tokens_usage_based:
+      - '999739'
+      x-ratelimit-reset-requests:
+      - 6ms
+      x-ratelimit-reset-tokens:
+      - 15ms
+      x-ratelimit-reset-tokens_usage_based:
+      - 15ms
+      x-request-id:
+      - bb46f4b99bef9c4110c020b695ee64c2
+    status:
+      code: 200
+      message: OK
+version: 1
