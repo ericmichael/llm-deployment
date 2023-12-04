@@ -26,6 +26,12 @@ COPY ./requirements.txt ./
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+# Install Node dependencies
+RUN npm install
+
+# Run the Webpacker build
+RUN npm run build
+
 # Create a user to run the app
 RUN useradd -m -u 1000 user
 
