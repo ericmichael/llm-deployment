@@ -100,15 +100,13 @@ WSGI_APPLICATION = 'aistarterkit.wsgi.application'
 # Get the SQLite storage path from the environment variable
 sqlite_storage_path = os.getenv('SQLITE3_STORAGE_PATH')
 
-if sqlite_storage_path:
-    # If SQLITE3_STORAGE_PATH is set, use it as the directory
-    db_path = Path(sqlite_storage_path) / 'db.sqlite3'
-    # Create the directory if it doesn't exist
-    os.makedirs(sqlite_storage_path, exist_ok=True)
-else:
+if not sqlite_storage_path:
     # Otherwise, use BASE_DIR as the directory
-    db_path = BASE_DIR / 'db/sqlite3/db.sqlite3'
-    os.makedirs(db_path, exist_ok=True)
+    sqlite_storage_path = Path(BASE_DIR) / 'db/sqlite3/'
+
+# Create the directory if it doesn't exist
+os.makedirs(sqlite_storage_path, exist_ok=True)
+db_path = Path(sqlite_storage_path) / 'db.sqlite3'
 
 
 CHROMADB_STORAGE_PATH = os.getenv('CHROMADB_STORAGE_PATH')
