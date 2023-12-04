@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "stimulus": "^3.2.2",
-    "tailwindcss-stimulus-components": "^4.0.4"
-  }
-}

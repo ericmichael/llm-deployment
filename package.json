@@ -6,10 +6,11 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },
+  "dependencies": {
+    "stimulus": "^3.2.2",
+    "tailwindcss-stimulus-components": "^4.0.4"
+  },
   "scripts": {
     "build": "webpack"
-  },
-  "dependencies": {
-    "tailwindcss-stimulus-components": "^4.0.4"
   }
 }
