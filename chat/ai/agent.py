@@ -18,6 +18,7 @@ Typical usage example:
 import openai
 import re
 from django.conf import settings
+from ..models import Message
 
 openai.api_base = settings.OPENAI_API_BASE
 openai.api_key = settings.OPENAI_API_KEY
@@ -80,12 +81,11 @@ class Agent:
         prompt: A string used as the initial prompt for the chat.
     """
 
-    def __init__(self, tools={}) -> None:
+    def __init__(self, tools={}, thread=None) -> None:
         self.tools = tools
         self.tool_invoker = ToolInvoker(tools)
-
-        self.history = []
-
+        self.thread = thread
+        self.history = self._build_history()
         self.prompt = self._build_prompt()
 
     def chat(self, message):
@@ -108,7 +108,20 @@ class Agent:
             self._update_history("assistant", ai_reply)
          
         return ai_reply
+    
+    def _build_history(self):
+        """Builds the history from the thread messages.
 
+        Returns:
+            A list of previous interactions with the user.
+        """
+        history = []
+        if self.thread is not None:  # Ensure that thread is not None
+            messages = Message.objects.filter(thread=self.thread).order_by('timestamp')
+            for message in messages:
+                history.append({"role": message.role, "content": message.content})
+        return history
+    
     def _build_prompt(self):
         """Builds the initial prompt for the chat.
 
@@ -200,3 +213,6 @@ class Agent:
             content: A string containing the message content.
         """
         self.history.append({"role": role, "content": content})
+        # Create and save a Message instance
+        if self.thread is not None:  # Ensure that thread is not None
+            Message.objects.create(thread=self.thread, user=self.thread.user, content=content, role=role)

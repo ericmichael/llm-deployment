@@ -10,17 +10,7 @@
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link href="https://unpkg.com/prismjs@1.29.0/themes/prism.css" rel="stylesheet" />
-    <link href="https://unpkg.com/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <style>
-        code {
-            text-shadow: none !important;
-        }
-
-        .token.operator {
-            background: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="{% static 'js/bundle.js' %}"></script>
 </head>
 
@@ -114,8 +104,6 @@
             });
         });
     </script>
-    <script src="https://unpkg.com/prismjs@1.29.0/components/prism-core.min.js"></script>
-    <script src="https://unpkg.com/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 </body>
 
 </html>
