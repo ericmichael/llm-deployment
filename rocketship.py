@@ -153,23 +153,28 @@ def setup():
     config = load_config()
     validate_config(config)
 
-    registry = config['registry']
-    image = config['image']
-    service = config['service']
+    registry = config['registry'] if 'registry' in config else None
+    image = config['image'] if 'image' in config else None
+    service = config['service'] if 'service' in config else None
+    azure = config['azure'] if 'azure' in config else None
+    github = config['github'] if 'github' in config else None
     github_token = os.getenv("GITHUB_TOKEN")
 
-    azure_login()
+    if azure:
+        azure_login()
 
     # Log into the registry
     try:
+        print(f'Logging into Docker Container Registry: {registry["server"]} ...')
         subprocess.run(['docker', 'login', registry['server'], '-u', registry['username'], '--password-stdin'],
                        input=registry['password'], encoding='utf-8', check=True)
     except subprocess.CalledProcessError:
-        print("Error logging into Docker registry.")
+        print("Error logging into Docker Container Registry.")
         return
 
     # Build the image
     try:
+        print(f'Building Docker image: {registry["server"]}/{image}:latest ...')
         subprocess.run(['docker', 'build', '-t', f'{registry["server"]}/{image}:latest', '.'], check=True)
     except subprocess.CalledProcessError:
         print("Error building Docker image.")
@@ -177,32 +182,38 @@ def setup():
 
     # Push the image to the registry
     try:
+        print(f'Pushing Docker image: {registry["server"]}/{image}:latest ...')
         subprocess.run(['docker', 'push', f'{registry["server"]}/{image}:latest'], check=True)
     except subprocess.CalledProcessError:
         print("Error pushing Docker image to registry.")
         return
 
-    # Pull the image from the registry onto the servers
-    print(f'Pulling image {image} from {registry["server"]} onto servers...')
-
     # Create and push secrets to Github
-    print(f'Pushing secrets to Github repository: {config["github"]["repo"]} ...')
-    # Load environment variables from .env file
-    env_variables = dotenv_values(".env")
-    github_secrets = {
-        'ROCKETSHIP_REGISTRY_SERVER': registry['server'],
-        'ROCKETSHIP_REGISTRY_USERNAME': registry['username'],
-        'ROCKETSHIP_REGISTRY_PASSWORD': registry['password'],
-        'ROCKETSHIP_IMAGE': image
-    }
-    all_github_secrets = {**env_variables, **github_secrets}
-    all_github_secrets.pop('GITHUB_TOKEN', None)
-    create_github_secrets(github_token, config['github']['repo'], all_github_secrets)
+    if github:
+        print(f'Pushing secrets to Github repository: {github["repo"]} ...')
+        # Load environment variables from .env file
+        env_variables = dotenv_values(".env")
+        github_secrets = {
+            'ROCKETSHIP_REGISTRY_SERVER': registry['server'],
+            'ROCKETSHIP_REGISTRY_USERNAME': registry['username'],
+            'ROCKETSHIP_REGISTRY_PASSWORD': registry['password'],
+            'ROCKETSHIP_IMAGE': image
+        }
+        all_github_secrets = {**env_variables, **github_secrets}
+        all_github_secrets.pop('GITHUB_TOKEN', None)
+        create_github_secrets(github_token, github['repo'], all_github_secrets)
+    else:
+        print("Missing configuration for Github...")
+        print("Pushing secrets to Github Repository:...skipped")
 
-    # Merge additional_env and env_variables
-    print(f'Pushing secrets to Azure Web App Service ...')
-    all_azure_secrets = {**env_variables, **config['azure']['app_service']['additional_env']}
-    update_app_settings(config['azure'], all_azure_secrets)
+    if azure:
+        print(f'Pushing secrets to Azure Web App Service ...')
+        all_azure_secrets = {**env_variables, **azure['app_service']['additional_env']}
+        update_app_settings(azure, all_azure_secrets)
+    else:
+        print("Missing configuration for Azure...")
+        print("Pushing secrets to Azure Web App Service...skipped")
+        
 
 def main():
     parser = argparse.ArgumentParser()
