@@ -52,7 +52,7 @@ class Thread(models.Model):
     model = models.CharField(
         max_length=20, choices=MODEL_CHOICES, default="gpt-3.5-turbo"
     )
-    temperature = models.FloatField()
+    temperature = models.FloatField(default=0)
     prompt = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)  # Add this field
 
