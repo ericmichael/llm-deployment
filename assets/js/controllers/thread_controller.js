@@ -12,6 +12,7 @@ export default class extends Controller {
   }
 
   submit(event) {
+    console.log("Submitting")
     event.preventDefault()
 
     // Remove "No messages yet" div if it exists
