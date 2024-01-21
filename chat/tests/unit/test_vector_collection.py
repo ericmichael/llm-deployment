@@ -1,6 +1,7 @@
 from django.test import TestCase
-import vcr
+from .vcr_config import vcr
 from chat.ai.vector_collection import Document, VectorCollection
+
 
 class TestDocument(TestCase):
     def test_to_embed_str(self):
@@ -16,11 +17,15 @@ class TestDocument(TestCase):
         doc = Document("1", data)
         self.assertEqual(doc.data, data)  # Check that the data is correctly assigned
 
+
 class TestVectorCollection(TestCase):
     def setUp(self):
         self.collection = VectorCollection(collection_name="test")
 
-    @vcr.use_cassette('chat/test/fixtures/vcr_cassettes/vector_collection.yaml', filter_headers=[('authorization', None)])
+    @vcr.use_cassette(
+        "chat/tests/fixtures/vcr_cassettes/vector_collection.yaml",
+        filter_headers=[("authorization", None)],
+    )
     def test_add_and_search(self):
         doc1 = Document("1", {"text": "Hello, world!"})
         doc2 = Document("2", {"text": "Goodbye, world!"})

@@ -25,7 +25,7 @@
                 <a href="{% url 'create_thread' %}" class="text-white">New Chat</a>
             </div>
             <!-- Thread List -->
-            <div class="border-t border-gray-700 overflow-y-visible">
+            <div class="border-t border-gray-700 overflow-y-auto">
                 {% for sidebar_thread in threads %}
                 <div
                     class="px-4 py-3 flex justify-between items-center hover:bg-gray-700 cursor-pointer {% if sidebar_thread.pk == thread.pk %}bg-gray-800{% endif %}">
