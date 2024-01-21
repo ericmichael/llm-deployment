@@ -69,6 +69,29 @@ def openai_api_chat_completions_passthrough(request):
     return Response(response.json())
 
 
+@api_view(["POST"])
+@authentication_classes([BearerAuthentication])
+@permission_classes([IsAuthenticated])
+def openai_api_completions_passthrough(request):
+    # Get the request data and headers
+    request_data = request.data
+    request_headers = request.META
+    openai_api_key = settings.OPENAI_API_KEY
+
+    # Forward the request to the OpenAI API
+    response = requests.post(
+        "https://api.openai.com/v1/completions",
+        json=request_data,
+        headers={
+            "Content-Type": request_headers.get("CONTENT_TYPE"),
+            "Authorization": f"Bearer {openai_api_key}",
+        },
+    )
+
+    # Return the OpenAI API response
+    return Response(response.json())
+
+
 @login_required
 def developer_settings(request):
     # Get or create the user's token
