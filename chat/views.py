@@ -94,6 +94,11 @@ OPENAI_API_KEY={api_key}
 """
 
     code_block_api_call = """
+import openai
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env
+
 prompt = "You are a helpful assistant"
 message = "Hi! Help me make tacos."
 
