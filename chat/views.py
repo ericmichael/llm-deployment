@@ -107,8 +107,8 @@ def developer_settings(request):
     api_key = token.key
 
     code_block_install = """
-pip install openai==0.27.9
-pip install python-dotenv==1.0.0
+pip install -U openai
+pip install -U python-dotenv
     """
 
     code_block_env = f"""
@@ -117,13 +117,19 @@ OPENAI_API_KEY={api_key}
 """
 
     code_block_api_call = """
+import os
 import openai
 from dotenv import load_dotenv
 
 load_dotenv()  # take environment variables from .env
 
+client = OpenAI(
+    base_url=os.environ.get("OPENAI_API_BASE"),
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
+
 prompt = "You are a helpful assistant"
-message = "Hi! Help me make tacos."
+message = "Hi! Help me write a 'hello world' program in Java."
 
 messages = [
     {"role": "system", "content": prompt},
@@ -132,9 +138,14 @@ messages = [
 
 model = "gpt-3.5-turbo"     # use gpt-3.5-turbo model
 temperature = 0     # controls randomness
-completion = openai.ChatCompletion.create(
-    model=model, messages=messages, temperature=temperature
+
+# Make an API call to the OpenAI ChatCompletion endpoint with the model and messages
+completion = client.chat.completions.create(
+    model=model,
+    messages=messages,
+    temperature=temperature
 )
+
 ai_reply = completion.choices[0].message.content.strip()
 print(ai_reply)
 """
