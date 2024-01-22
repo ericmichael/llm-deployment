@@ -28,69 +28,71 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ENV = os.getenv("ENVIRONMENT", 'development')
+ENV = os.getenv("ENVIRONMENT", "development")
 
-website_hostname = os.getenv('WEBSITE_HOSTNAME')
+website_hostname = os.getenv("WEBSITE_HOSTNAME")
 
-if ENV == 'development' or ENV == 'test':
+if ENV == "development" or ENV == "test":
     DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 else:
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = []
     if website_hostname:
-        CSRF_TRUSTED_ORIGINS = ['https://' + website_hostname]
+        CSRF_TRUSTED_ORIGINS = ["https://" + website_hostname]
         ALLOWED_HOSTS.append(website_hostname)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = 'None'
-    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = "None"
+    CSRF_COOKIE_SAMESITE = "None"
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'chat',
-    'rest_framework',
-    'rest_framework.authtoken',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "chat",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'aistarterkit.urls'
-LOGIN_REDIRECT_URL = 'thread_list'  # or 'thread_list' or any other view you want to redirect to
-LOGOUT_REDIRECT_URL = 'login'  # Assuming 'login' is the name of your login URL pattern
+ROOT_URLCONF = "aistarterkit.urls"
+LOGIN_REDIRECT_URL = (
+    "thread_list"  # or 'thread_list' or any other view you want to redirect to
+)
+LOGOUT_REDIRECT_URL = "login"  # Assuming 'login' is the name of your login URL pattern
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'chat.context_processors.thread_list',  # Add this line
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "chat.context_processors.thread_list",  # Add this line
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'aistarterkit.wsgi.application'
+WSGI_APPLICATION = "aistarterkit.wsgi.application"
 
 
 # Database
@@ -98,24 +100,24 @@ WSGI_APPLICATION = 'aistarterkit.wsgi.application'
 
 
 # Get the SQLite storage path from the environment variable
-sqlite_storage_path = os.getenv('SQLITE3_STORAGE_PATH')
+sqlite_storage_path = os.getenv("SQLITE3_STORAGE_PATH")
 
 if not sqlite_storage_path:
     # Otherwise, use BASE_DIR as the directory
-    sqlite_storage_path = Path(BASE_DIR) / 'db/sqlite3/'
+    sqlite_storage_path = Path(BASE_DIR) / "db/sqlite3/"
 
 # Create the directory if it doesn't exist
 os.makedirs(sqlite_storage_path, exist_ok=True)
-db_path = Path(sqlite_storage_path) / 'db.sqlite3'
+db_path = Path(sqlite_storage_path) / "db.sqlite3"
 
 
-CHROMADB_STORAGE_PATH = os.getenv('CHROMADB_STORAGE_PATH')
-  
+CHROMADB_STORAGE_PATH = os.getenv("CHROMADB_STORAGE_PATH")
+
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(db_path),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": str(db_path),
     }
 }
 
@@ -125,31 +127,31 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
     ],
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -160,34 +162,36 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'assets',
+    BASE_DIR / "assets",
 ]
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
-STATIC_ROOT = os.path.join(os.getenv('DJANGO_STATIC_ROOT', BASE_DIR), 'staticfiles')
+STATIC_ROOT = os.path.join(os.getenv("DJANGO_STATIC_ROOT", BASE_DIR), "staticfiles")
 
 os.makedirs(STATIC_ROOT, exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_URL = 'login'
+LOGIN_URL = "login"
 
 DEFAULT_OPENAI_API_BASE = "https://api.openai.com/v1"
 
 ENV_OPENAI_API_BASE = os.getenv("OPENAI_API_BASE")
 
-OPENAI_API_BASE = ENV_OPENAI_API_BASE if ENV_OPENAI_API_BASE else DEFAULT_OPENAI_API_BASE 
+OPENAI_API_BASE = (
+    ENV_OPENAI_API_BASE if ENV_OPENAI_API_BASE else DEFAULT_OPENAI_API_BASE
+)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", None)
 
-AUTH_USER_MODEL = 'chat.CustomUser'
+AUTH_USER_MODEL = "chat.CustomUser"
 
-DEFAULT_ADMIN_USERNAME=os.getenv("DEFAULT_ADMIN_USERNAME")
+DEFAULT_ADMIN_USERNAME = os.getenv("DEFAULT_ADMIN_USERNAME")
 
-DEFAULT_ADMIN_EMAIL=os.getenv("DEFAULT_ADMIN_EMAIL")
+DEFAULT_ADMIN_EMAIL = os.getenv("DEFAULT_ADMIN_EMAIL")
 
-DEFAULT_ADMIN_PASSWORD=os.getenv("DEFAULT_ADMIN_PASSWORD")
+DEFAULT_ADMIN_PASSWORD = os.getenv("DEFAULT_ADMIN_PASSWORD")
