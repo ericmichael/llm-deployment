@@ -31,6 +31,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ENV = os.getenv("ENVIRONMENT", "development")
 
 website_hostname = os.getenv("WEBSITE_HOSTNAME")
+custom_hostname = os.getenv("WEBSITE_HOSTNAME")
+
+CSRF_TRUSTED_ORIGINS = []
 
 if ENV == "development" or ENV == "test":
     DEBUG = True
@@ -38,8 +41,11 @@ if ENV == "development" or ENV == "test":
 else:
     DEBUG = False
     ALLOWED_HOSTS = []
+    if custom_hostname:
+        CSRF_TRUSTED_ORIGINS.append("https://" + custom_hostname)
+        ALLOWED_HOSTS.append(custom_hostname)
     if website_hostname:
-        CSRF_TRUSTED_ORIGINS = ["https://" + website_hostname]
+        CSRF_TRUSTED_ORIGINS.append("https://" + website_hostname)
         ALLOWED_HOSTS.append(website_hostname)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
