@@ -53,19 +53,37 @@ def openai_api_chat_completions_passthrough(request):
     # Get the request data and headers
     request_data = request.data
     request_headers = request.META
-    openai_api_key = settings.OPENAI_API_KEY
 
-    # Forward the request to the OpenAI API
-    response = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        json=request_data,
-        headers={
+    # Extract the deployment name and API version from the request data
+    deployment_name = request_data.get(
+        "model", None
+    )  # Provide a default if not specified
+    api_version = settings.OPENAI_API_VERSION
+
+    # Determine the API key and endpoint based on configuration
+    if settings.OPENAI_API_TYPE == "azure":
+        api_key = settings.AZURE_OPENAI_API_KEY
+        endpoint = f"{settings.AZURE_OPENAI_ENDPOINT}/openai/deployments/{deployment_name}/chat/completions?api-version={api_version}"
+        headers = {
             "Content-Type": request_headers.get("CONTENT_TYPE"),
-            "Authorization": f"Bearer {openai_api_key}",
-        },
+            "api-key": api_key,
+        }
+    else:
+        api_key = settings.OPENAI_API_KEY
+        endpoint = "https://api.openai.com/v1/chat/completions"
+        headers = {
+            "Content-Type": request_headers.get("CONTENT_TYPE"),
+            "Authorization": f"Bearer {api_key}",
+        }
+
+    # Forward the request to the appropriate API
+    response = requests.post(
+        endpoint,
+        json=request_data,
+        headers=headers,
     )
 
-    # Return the OpenAI API response
+    # Return the API response
     return Response(response.json())
 
 
@@ -76,19 +94,36 @@ def openai_api_completions_passthrough(request):
     # Get the request data and headers
     request_data = request.data
     request_headers = request.META
-    openai_api_key = settings.OPENAI_API_KEY
 
-    # Forward the request to the OpenAI API
-    response = requests.post(
-        "https://api.openai.com/v1/completions",
-        json=request_data,
-        headers={
+    # Extract the deployment name and API version from the request data
+    deployment_name = request_data.get("model")
+    api_version = settings.OPENAI_API_VERSION
+
+    # Determine the API key and endpoint based on configuration
+    if settings.OPENAI_API_TYPE == "azure":
+        api_key = settings.AZURE_OPENAI_API_KEY
+
+        endpoint = f"{settings.AZURE_OPENAI_ENDPOINT}/openai/deployments/{deployment_name}/completions?api-version={api_version}"
+        headers = {
             "Content-Type": request_headers.get("CONTENT_TYPE"),
-            "Authorization": f"Bearer {openai_api_key}",
-        },
+            "api-key": api_key,
+        }
+    else:
+        api_key = settings.OPENAI_API_KEY
+        endpoint = "https://api.openai.com/v1/completions"
+        headers = {
+            "Content-Type": request_headers.get("CONTENT_TYPE"),
+            "Authorization": f"Bearer {api_key}",
+        }
+
+    # Forward the request to the appropriate API
+    response = requests.post(
+        endpoint,
+        json=request_data,
+        headers=headers,
     )
 
-    # Return the OpenAI API response
+    # Return the API response
     return Response(response.json())
 
 

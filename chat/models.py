@@ -43,14 +43,14 @@ class CustomUser(AbstractUser):
 
 class Thread(models.Model):
     MODEL_CHOICES = [
-        ("gpt-4", "gpt-4"),
-        ("gpt-3.5-turbo-16k", "gpt-3.5-turbo-16k"),
-        ("gpt-3.5-turbo", "gpt-3.5-turbo"),
+        ("gpt-35-turbo-16k", "gpt-35-turbo-16k"),
+        ("gpt-4o", "gpt-4o"),
+        ("gpt-4o-mini", "gpt-4o-mini"),
     ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=200, default="New Thread")
     model = models.CharField(
-        max_length=20, choices=MODEL_CHOICES, default="gpt-3.5-turbo"
+        max_length=20, choices=MODEL_CHOICES, default="gpt-4o-mini"
     )
     temperature = models.FloatField(default=0)
     prompt = models.TextField()

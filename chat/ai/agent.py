@@ -6,13 +6,22 @@ Typical usage example:
     agent = Agent()
     response = agent.chat("Tell me a joke")
 """
-import openai
+
+import os
+import json
+from openai import OpenAI, AzureOpenAI
 import re
 from django.conf import settings
 from ..models import Message
 
-openai.api_base = settings.OPENAI_API_BASE
-openai.api_key = settings.OPENAI_API_KEY
+# Initialize the OpenAI client
+if settings.OPENAI_API_TYPE == "azure":
+    client = AzureOpenAI(
+        api_version=settings.OPENAI_API_VERSION,
+        azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+    )
+else:
+    client = OpenAI()
 
 
 class Agent:
@@ -60,7 +69,7 @@ class Agent:
         return history
 
     def _get_ai_reply(
-        self, message, model="gpt-3.5-turbo", system_message=None, temperature=0
+        self, message, model="gpt-35-turbo-16k", system_message=None, temperature=0
     ):
         """Gets a response from the AI model.
 
@@ -74,7 +83,7 @@ class Agent:
             A string containing the AI's response.
         """
         messages = self._prepare_messages(message, system_message)
-        completion = openai.ChatCompletion.create(
+        completion = client.chat.completions.create(
             model=model, messages=messages, temperature=temperature
         )
         return completion.choices[0].message.content.strip()

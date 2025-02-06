@@ -184,15 +184,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "login"
 
-DEFAULT_OPENAI_API_BASE = "https://api.openai.com/v1"
+OPENAI_API_TYPE = os.getenv("OPENAI_API_TYPE", "openai")
+OPENAI_API_VERSION = os.getenv("OPENAI_API_VERSION", "2024-10-21")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-ENV_OPENAI_API_BASE = os.getenv("OPENAI_API_BASE")
-
-OPENAI_API_BASE = (
-    ENV_OPENAI_API_BASE if ENV_OPENAI_API_BASE else DEFAULT_OPENAI_API_BASE
-)
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", None)
+# Azure OpenAI Settings
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 
 AUTH_USER_MODEL = "chat.CustomUser"
 
