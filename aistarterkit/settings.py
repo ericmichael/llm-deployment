@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ENV = os.getenv("ENVIRONMENT", "development")
 
 website_hostname = os.getenv("WEBSITE_HOSTNAME")
-custom_hostname = os.getenv("WEBSITE_HOSTNAME")
+custom_hostname = os.getenv("CUSTOM_HOSTNAME")
 
 CSRF_TRUSTED_ORIGINS = []
 
